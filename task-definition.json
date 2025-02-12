@@ -1,0 +1,30 @@
+{
+    "family": "fastapi-nginx-task",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": ["FARGATE"],
+    "cpu": "256",
+    "memory": "512",
+    "executionRoleArn": "arn:aws:iam::183295442961:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+        {
+            "name": "fastapi-nginx-container",
+            "image": "183295442961.dkr.ecr.us-west-2.amazonaws.com/fastapi-nginx-app:latest",
+            "portMappings": [
+                {
+                    "containerPort": 80,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "healthCheck": {
+                "command": [
+                    "CMD-SHELL",
+                    "curl -f http://localhost/health || exit 1"
+                ],
+                "interval": 30,
+                "timeout": 5,
+                "retries": 3
+            }
+        }
+    ]
+}
